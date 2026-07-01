@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Inglês Médico">
+  <rect width="512" height="512" fill="#0b7285"/>
+  <g fill="#ffffff">
+    <rect x="205" y="102" width="102" height="308" rx="14"/>
+    <rect x="102" y="205" width="308" height="102" rx="14"/>
+  </g>
+  <circle cx="369" cy="369" r="31" fill="#e8590c"/>
+</svg>
