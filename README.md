@@ -29,7 +29,7 @@ carregamento, funciona **offline** (instalável como app).
 | 21 | **OET Reading** | Part A cronometrada (15 min, skim/scan) + MCQ de inferência |
 | 22 | **OET Writing** | Case notes → carta (referral/discharge/transfer); contador 180–200, checklist, carta-modelo, correção por IA opcional |
 | 23 | **OET Speaking** | Role-plays: modo offline (diálogo ramificado) e modo voz (STT+TTS + IA) com feedback |
-| 24 | **USMLE / clínico** | Termos de alto rendimento em enunciados, patient notes (SOAP), abreviações |
+| 24 | **USMLE / clínico** | Termos de alto rendimento em enunciados, patient notes (SOAP), abreviações (glossário + SRS + quiz) |
 | 25 | **Simulado OET** | Mock dos 4 sub-testes → 0–500 por skill + grade A–E; verifica metas ECFMG (350/350/350/300) |
 
 Mais: **Estatísticas** (domínio de vocabulário, acerto por módulo, placar OET vs ECFMG, ofensiva,

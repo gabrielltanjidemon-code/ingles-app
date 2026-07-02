@@ -44,6 +44,7 @@
     var vocab = deckMastery('vocab');
     var usmle = deckMastery('usmle');
     var comm = deckMastery('comm');
+    var abbrev = deckMastery('abbrev');
     var bestMock = Progress.bestMock();
     var ECFMG = Badges.ECFMG;
 
@@ -71,6 +72,7 @@
         masteryRow('Vocabulário médico', vocab, (window.MEDVOCAB || []).length),
         masteryRow('Termos USMLE', usmle, (window.USMLE_CLINICAL || []).filter(function (x) { return x.kind === 'high-yield-term'; }).length),
         masteryRow('Comunicação clínica', comm, (window.CLINICALCOMM || []).length),
+        masteryRow('Abreviações', abbrev, (window.MEDABBREV || []).length),
         el('div', { class: 'muted small' }, 'Ativo = revisado ≥ 2 vezes (memória consolidada). Passivo = já visto.')
       ]),
 

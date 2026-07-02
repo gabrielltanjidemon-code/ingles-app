@@ -60,7 +60,7 @@
       var feedback = el('div', {});
       var nextBtn = el('button', { class: 'btn primary hidden', onClick: function () { idx++; showTurn(); } }, idx + 1 >= turns.length ? 'Finalizar' : 'Continuar');
 
-      turn.choices.forEach(function (ch) {
+      UI.shuffle(turn.choices).forEach(function (ch) {
         var b = el('button', { class: 'choice' });
         b.appendChild(el('span', {}, ch.text));
         b.addEventListener('click', function () {

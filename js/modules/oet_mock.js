@@ -104,7 +104,7 @@
         var turn = turns[idx];
         if (TTS.available()) TTS.speak(turn.patient, { lang: 'en-GB' });
         var chosen = false;
-        var choices = el('div', { class: 'choices' }, turn.choices.map(function (ch) {
+        var choices = el('div', { class: 'choices' }, UI.shuffle(turn.choices).map(function (ch) {
           var b = el('button', { class: 'choice' }, ch.text);
           b.addEventListener('click', function () {
             if (chosen) return; chosen = true;

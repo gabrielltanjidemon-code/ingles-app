@@ -363,5 +363,252 @@ window.OET_LISTENING = [
     options:['During surgery','When a patient moves between settings','Only in the community','When new drugs launch'],
     answer:1,
     pt:'Transições de cuidado são o ponto crítico para erros de medicação.',
-    focus:['medication safety','transitions of care'] }
+    focus:['medication safety','transitions of care'] },
+
+  /* ---------------- Part A: mais consultas (note completion) ---------------- */
+  { id:'oetL0009', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: How's the asthma been treating you lately? "+
+      "Patient: Not brilliantly. I'm reaching for the blue inhaler three or four times a day now. "+
+      "Doctor: And at night? "+
+      "Patient: I've been waking up coughing a couple of nights a week. "+
+      "Doctor: Have you noticed anything that sets it off? "+
+      "Patient: My daughter's new cat, I think. And it's worse when the pollen's high. "+
+      "Doctor: Are you using the brown preventer inhaler every day? "+
+      "Patient: Honestly? Only when I remember — maybe half the time.",
+    fields:[
+      { label:'Reliever use', answer:'three or four times a day', accept:['3-4 times a day','three to four times daily'] },
+      { label:'Night symptoms', answer:'waking up coughing a couple of nights a week', accept:['waking coughing twice a week','night cough two nights a week'] },
+      { label:'Triggers', answer:'the cat and high pollen', accept:['cat and pollen','daughter\'s cat, pollen'] },
+      { label:'Preventer adherence', answer:'only when she remembers, about half the time', accept:['about half the time','uses preventer irregularly'] }
+    ],
+    pt:'Controle da asma: uso do reliever, sintomas noturnos, gatilhos e adesão ao preventer.',
+    focus:['asthma control','adherence','triggers'] },
+
+  { id:'oetL0010', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: I hear your back's been playing up. What happened? "+
+      "Patient: I was lifting boxes at work two days ago and felt something go, right across my lower back. "+
+      "Doctor: Does the pain move anywhere? "+
+      "Patient: It shoots down the back of my right leg, as far as the knee. "+
+      "Doctor: What makes it worse? "+
+      "Patient: Sitting for any length of time. Walking about actually helps a bit. "+
+      "Doctor: Any numbness around your back passage, or trouble controlling your bladder? "+
+      "Patient: No, nothing like that. "+
+      "Doctor: What have you taken for it? "+
+      "Patient: Just ibuprofen from the chemist, but it's barely touching it.",
+    fields:[
+      { label:'Onset', answer:'lifting boxes at work two days ago', accept:['lifting at work, two days ago','two days ago while lifting boxes'] },
+      { label:'Radiation', answer:'down the back of the right leg to the knee', accept:['down the right leg to the knee','right leg as far as the knee'] },
+      { label:'Aggravating factor', answer:'sitting', accept:['sitting for any length of time','prolonged sitting'] },
+      { label:'Red flags', answer:'none — no saddle numbness or bladder problems', accept:['no red flags','no numbness or bladder trouble'] },
+      { label:'Current medication', answer:'ibuprofen, with little effect', accept:['ibuprofen barely helping','over-the-counter ibuprofen'] }
+    ],
+    pt:'Lombalgia mecânica com ciática; note o rastreio de cauda equina ("back passage", "bladder").',
+    focus:['back pain','red-flag screening','lay anatomy'] },
+
+  { id:'oetL0011', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: Tell me about this pain you've been getting. "+
+      "Patient: It's up here, under my ribs on the right side. It comes on an hour or so after dinner. "+
+      "Doctor: Any particular kind of dinner? "+
+      "Patient: Now you mention it, it's always after something fatty — fish and chips, or a takeaway. "+
+      "Doctor: Does the pain spread anywhere? "+
+      "Patient: Round to my back, up by my right shoulder blade. "+
+      "Doctor: How long does it last? "+
+      "Patient: A couple of hours, then it wears off on its own. "+
+      "Doctor: Anything else with it? "+
+      "Patient: I feel sick with it, but I've not actually been sick. And no, my skin's not gone yellow — my wife checked.",
+    fields:[
+      { label:'Site of pain', answer:'under the ribs on the right side', accept:['right upper abdomen','under the right ribs'] },
+      { label:'Trigger', answer:'fatty food', accept:['fatty meals','after fatty dinners'] },
+      { label:'Radiation', answer:'to the right shoulder blade', accept:['round to the back, right shoulder blade','right shoulder blade'] },
+      { label:'Duration', answer:'a couple of hours', accept:['about two hours','2 hours'] },
+      { label:'Associated symptoms', answer:'nausea, no vomiting, no jaundice', accept:['feels sick but not been sick, no yellowing','nausea without vomiting or jaundice'] }
+    ],
+    pt:'Cólica biliar clássica: dor pós-prandial gordurosa irradiando à escápula. "Been sick" = vomitar.',
+    focus:['biliary colic','feel sick vs be sick','radiation'] },
+
+  { id:'oetL0012', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: You mentioned dizzy spells on the phone. Describe one for me. "+
+      "Patient: The whole room spins, like I've just stepped off a roundabout. "+
+      "Doctor: When does it happen? "+
+      "Patient: Mostly when I roll over in bed, or when I tip my head back to hang the washing. "+
+      "Doctor: How long does the spinning last? "+
+      "Patient: Less than a minute — maybe thirty seconds — then it settles. "+
+      "Doctor: Any sickness with it? "+
+      "Patient: I feel queasy, but I've never actually been sick. "+
+      "Doctor: And your hearing? Any ringing in the ears? "+
+      "Patient: No, hearing's fine, no ringing. It all started after that heavy cold last month.",
+    fields:[
+      { label:'Character', answer:'the room spinning', accept:['spinning sensation','true vertigo'] },
+      { label:'Trigger', answer:'rolling over in bed or tipping the head back', accept:['turning in bed, looking up','head position changes'] },
+      { label:'Duration of episode', answer:'less than a minute', accept:['about thirty seconds','under a minute'] },
+      { label:'Hearing', answer:'normal, no tinnitus', accept:['fine, no ringing','no hearing change or ringing'] },
+      { label:'Onset', answer:'after a heavy cold last month', accept:['following a cold','after a cold a month ago'] }
+    ],
+    pt:'VPPB: vertigem posicional breve, audição normal. Note a linguagem do paciente ("roundabout", "queasy").',
+    focus:['vertigo','positional trigger','patient metaphors'] },
+
+  { id:'oetL0013', part:'A', type:'note', speakers:['nurse','patient'],
+    audio_text:"Nurse: Before your operation I need to run through allergies. Are you allergic to any medicines? "+
+      "Patient: Penicillin. I came out in hives all over as a child. "+
+      "Nurse: Any food allergies? "+
+      "Patient: Peanuts. Last year my lips swelled up and my throat felt tight within minutes. "+
+      "Nurse: That sounds serious. Do you carry anything for it? "+
+      "Patient: Yes, I've got an EpiPen in my bag wherever I go. "+
+      "Nurse: Have you ever had an anaesthetic before? "+
+      "Patient: Twice, and no problems either time. "+
+      "Nurse: Perfect, I'll flag the allergies on your wristband.",
+    fields:[
+      { label:'Drug allergy', answer:'penicillin — hives as a child', accept:['penicillin, came out in hives','penicillin rash'] },
+      { label:'Food allergy', answer:'peanuts — lip swelling and tight throat', accept:['peanuts with swelling of lips and throat tightness','peanut anaphylaxis'] },
+      { label:'Emergency device', answer:'carries an EpiPen', accept:['EpiPen','adrenaline auto-injector'] },
+      { label:'Previous anaesthetics', answer:'two, with no problems', accept:['twice, no problems','no anaesthetic reactions'] }
+    ],
+    pt:'Checagem pré-operatória de alergias: reação, gravidade e dispositivo de emergência.',
+    focus:['allergy history','anaphylaxis features','pre-op checks'] },
+
+  { id:'oetL0014', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: You said you wanted to talk about your drinking. Tell me what a typical evening looks like. "+
+      "Patient: Most nights it's three or four cans of the strong lager. More at the weekend, if I'm honest. "+
+      "Doctor: Have you ever tried to cut down? "+
+      "Patient: Last year. I managed two weeks and then it crept back up. "+
+      "Doctor: Some people notice shakes in the morning until they've had a drink. Does that happen to you? "+
+      "Patient: Lately, yes. My hands are shaky till the first can. "+
+      "Doctor: Has the drinking caused any problems at work or at home? "+
+      "Patient: I've had a warning at work for missing shifts. That's really why I'm here.",
+    fields:[
+      { label:'Typical intake', answer:'three or four cans of strong lager most nights', accept:['3-4 cans of strong lager nightly','three or four strong lagers most evenings'] },
+      { label:'Pattern', answer:'more at the weekend', accept:['heavier at weekends','increases at the weekend'] },
+      { label:'Withdrawal feature', answer:'morning shakes until the first drink', accept:['shaky hands in the morning','morning tremor relieved by drinking'] },
+      { label:'Impact', answer:'a warning at work for missing shifts', accept:['work warning for missed shifts','disciplinary warning at work'] }
+    ],
+    pt:'História de álcool sem julgamento: quantidade, tentativas de reduzir, abstinência matinal, impacto.',
+    focus:['alcohol history','withdrawal','non-judgemental tone'] },
+
+  { id:'oetL0015', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: What's brought you in today? "+
+      "Patient: My throat. It's been raw for four days and it's getting worse, not better. "+
+      "Doctor: Are you able to eat and drink? "+
+      "Patient: Swallowing food really hurts. I'm managing sips of water and that's about it. "+
+      "Doctor: Any fever? "+
+      "Patient: Last night I measured thirty-eight point two. "+
+      "Doctor: Your voice sounds a little muffled. Have you looked at your throat? "+
+      "Patient: My flatmate had a look with a torch — she said there are white spots all over my tonsils.",
+    fields:[
+      { label:'Duration', answer:'four days, getting worse', accept:['4 days and worsening','four days'] },
+      { label:'Swallowing', answer:'painful — managing only sips of water', accept:['can only manage sips of water','painful swallowing, fluids only'] },
+      { label:'Temperature', answer:'38.2 last night', accept:['thirty-eight point two','38.2'] },
+      { label:'Throat appearance', answer:'white spots on the tonsils', accept:['white spots over the tonsils','exudate on tonsils'] }
+    ],
+    pt:'Amigdalite: disfagia progressiva e exsudato. "Muffled voice" é sinal de alerta (abscesso).',
+    focus:['sore throat','swallowing','red flags'] },
+
+  { id:'oetL0016', part:'A', type:'note', speakers:['doctor','patient'],
+    audio_text:"Doctor: I understand you had a fall at home. Talk me through what happened. "+
+      "Patient: I got up in the night to spend a penny and tripped over the rug in the bedroom. "+
+      "Doctor: Did you feel anything before you went down — dizzy, or your heart racing? "+
+      "Patient: I did feel a bit light-headed when I first stood up from the bed. "+
+      "Doctor: Did you black out at all? "+
+      "Patient: No, I remember the whole thing, start to finish. "+
+      "Doctor: Were you hurt? "+
+      "Patient: I've a nasty bruise on my hip, but I didn't hit my head. "+
+      "Doctor: Have your tablets changed recently? "+
+      "Patient: The doctor started me on a new blood-pressure tablet last month. "+
+      "Doctor: And is there anyone at home with you? "+
+      "Patient: No, I've lived alone since my husband passed.",
+    fields:[
+      { label:'Circumstances', answer:'tripped over the bedroom rug at night', accept:['tripped on the rug getting up at night','fell over a rug at night'] },
+      { label:'Warning symptom', answer:'light-headed on standing', accept:['felt light-headed when standing up','dizziness on standing'] },
+      { label:'Loss of consciousness', answer:'none — remembers the whole event', accept:['no blackout','did not black out'] },
+      { label:'Injury', answer:'bruised hip, no head injury', accept:['hip bruise, did not hit head','bruise on the hip only'] },
+      { label:'Medication change', answer:'new blood-pressure tablet last month', accept:['recently started antihypertensive','new BP tablet a month ago'] },
+      { label:'Social situation', answer:'lives alone', accept:['alone at home','widowed, lives alone'] }
+    ],
+    pt:'Queda no idoso: circunstância, hipotensão postural, medicação nova e rede de apoio. "Spend a penny" = ir ao banheiro.',
+    focus:['falls assessment','postural symptoms','euphemisms'] },
+
+  /* ---------------- Part B: mais trechos de contexto de trabalho ---------------- */
+  { id:'oetL0111', part:'B', type:'mcq', speakers:['radiographer','patient'],
+    audio_text:"Radiographer: A few instructions for Thursday's abdominal ultrasound. Please don't eat anything "+
+      "for six hours beforehand — an empty stomach gives us much clearer pictures of the gallbladder. "+
+      "You can drink still water, and do take your usual tablets with a small sip.",
+    question:'What must the patient do before the ultrasound?',
+    options:['Stop all medication','Avoid food for six hours','Drink a litre of milk','Arrive fasted for 24 hours'],
+    answer:1,
+    pt:'Instrução de preparo: jejum de 6 h, água e medicações habituais permitidas.',
+    focus:['test preparation','instructions'] },
+  { id:'oetL0112', part:'B', type:'mcq', speakers:['doctor','patient'],
+    audio_text:"Doctor: This is your GTN spray for the angina. When the chest pain comes on, sit yourself down first, "+
+      "then one spray under the tongue. It works fast, but it can drop your blood pressure and make you dizzy — "+
+      "that's why I want you sitting. If the pain hasn't gone five minutes after a second spray, call an ambulance.",
+    question:'Why should the patient sit down before using the spray?',
+    options:['It works better lying down','It can cause dizziness','To count the sprays','To time five minutes'],
+    answer:1,
+    pt:'GTN vasodilata → hipotensão e tontura; por isso, sentar antes de usar.',
+    focus:['medication counselling','rationale'] },
+  { id:'oetL0113', part:'B', type:'mcq', speakers:['nurse','doctor'],
+    audio_text:"Nurse: Quick update on Mr Field in bed two. His oxygen sats slipped from ninety-six to eighty-eight "+
+      "on air overnight, and his breathing rate's up at twenty-four. I've started him on two litres via nasal cannula, "+
+      "which has brought him back up to ninety-four, and the outreach team will review him within the hour.",
+    question:'What action has already been taken?',
+    options:['He has been intubated','Oxygen has been started','Antibiotics were given','He was moved to intensive care'],
+    answer:1,
+    pt:'Em handovers, separe o que JÁ foi feito (oxigênio) do que está planejado (revisão).',
+    focus:['handover','actions taken vs planned'] },
+  { id:'oetL0114', part:'B', type:'mcq', speakers:['physio','patient'],
+    audio_text:"Physiotherapist: With this ankle fracture, the rule for the next two weeks is no weight at all through "+
+      "the left foot — the crutches do the work, the foot just floats. After your clinic review, we'll likely move to "+
+      "putting some weight through it as pain allows. And when you're sitting, keep the leg up on a stool to help the swelling.",
+    question:'What must the patient avoid for the first two weeks?',
+    options:['Using the crutches','Putting weight through the left foot','Sitting with the leg raised','Attending the clinic review'],
+    answer:1,
+    pt:'"Non-weight-bearing": nenhum peso no pé por 2 semanas; depois, progressão conforme a dor.',
+    focus:['mobility instructions','weight-bearing status'] },
+
+  /* ---------------- Part C: mais palestras/entrevistas ---------------- */
+  { id:'oetL0209', part:'C', type:'mcq', speakers:['interviewer','specialist'],
+    audio_text:"Interviewer: Professor, why do you say a fall in an older person is 'never just a trip'? "+
+      "Specialist: Because when we look closely, there's almost always a stack of contributing factors: "+
+      "four or five medications interacting, fading eyesight, weaker muscles, a loose rug at home. "+
+      "The fall is simply the moment they all line up. And of that whole stack, the piece we can change "+
+      "most quickly is the medication list — one structured review often removes two or three culprits, "+
+      "especially sedatives and blood-pressure tablets that drop the pressure on standing.",
+    question:'Which contributing factor does the specialist say can be changed most quickly?',
+    options:['Home hazards like rugs','Muscle weakness','The medication list','Failing eyesight'],
+    answer:2,
+    pt:'Quedas são multifatoriais; a revisão de medicações é o fator reversível mais rápido.',
+    focus:['falls','multifactorial causes','key detail'] },
+  { id:'oetL0210', part:'C', type:'mcq', speakers:['presenter'],
+    audio_text:"Presenter: Ask a patient 'Do you understand?' and you will almost always hear yes — "+
+      "it's the polite answer, not the true one. Teach-back turns the question around. We say: "+
+      "'I want to be sure I explained that clearly. Could you tell me, in your own words, how you'll take "+
+      "this medicine?' Notice where the responsibility sits — with my explanation, not their memory. "+
+      "Framed that way, patients don't feel tested, and the gaps in understanding surface while we can still fix them.",
+    question:'How should teach-back be framed, according to the speaker?',
+    options:["As a test of the patient's memory",'As a check of the clinician\'s explanation','As a written questionnaire','As a task for the family'],
+    answer:1,
+    pt:'Teach-back: a responsabilidade é da explicação do clínico — o paciente não está sendo testado.',
+    focus:['teach-back','framing','main idea'] },
+  { id:'oetL0211', part:'C', type:'mcq', speakers:['interviewer','specialist'],
+    audio_text:"Interviewer: Why does the classic advice — eat less, move more — so often fail? "+
+      "Specialist: Because it ignores the life the patient actually lives. Tell a night-shift worker with two jobs "+
+      "to cook fresh meals and join a gym, and you've prescribed something impossible. What works is almost "+
+      "embarrassingly modest: one small, specific change the patient chooses — swapping the sugary drinks, "+
+      "a ten-minute walk after lunch — written down, and reviewed at the next visit. Small and kept "+
+      "beats ambitious and abandoned, every time.",
+    question:'What approach does the specialist recommend for lifestyle change?',
+    options:['A strict diet and gym plan','One small, patient-chosen change with review','Referring everyone to a dietitian','Repeating the advice more firmly'],
+    answer:1,
+    pt:'Mudança de estilo de vida: pequena, específica, escolhida pelo paciente e revisada.',
+    focus:['lifestyle counselling','behaviour change','main idea'] },
+  { id:'oetL0212', part:'C', type:'mcq', speakers:['presenter'],
+    audio_text:"Presenter: Early illness rarely shows its full face at the first visit, so uncertainty isn't a failure "+
+      "of the consultation — it's built into it. Safety netting is how we share that uncertainty honestly with "+
+      "the patient. It has three parts: what to watch for, how soon to come back, and what we'll do next if "+
+      "things change. 'It looks like a simple infection today. But if the fever isn't settling in forty-eight hours, "+
+      "or the rash spreads, I need to see you again.' That single sentence turns uncertainty into a shared plan.",
+    question:'What is safety netting, according to the speaker?',
+    options:['Admitting patients whenever unsure','Ordering every available test','Telling the patient what to watch for and when to return','Avoiding a diagnosis at the first visit'],
+    answer:2,
+    pt:'Safety netting: o que observar, quando voltar e o que acontece depois — plano compartilhado.',
+    focus:['safety netting','uncertainty','structure of advice'] }
 ];
