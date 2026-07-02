@@ -84,16 +84,17 @@
   }
 
   function buildQuiz() {
-    var pool = UI.shuffle(terms()).slice(0, 12);
-    return pool.map(function (t) {
+    var picked = Common.pickAdaptive(terms(), 'usmle:terms', 12);
+    var questions = picked.pool.map(function (t) {
       var correct = t.pt;
       var distractors = UI.shuffle(terms().filter(function (x) { return x.id !== t.id; })).slice(0, 3).map(function (x) { return x.pt; });
       var options = UI.shuffle([correct].concat(distractors));
       return {
         prompt: el('div', {}, [ el('p', { class: 'quiz-prompt' }, 'No enunciado, o que significa o termo em destaque?'), el('div', { class: 'stem' }, [ el('em', {}, stemHighlight(t)), ' ', UI.audioBtn(t.stem_example_en) ]) ]),
-        options: options, answer: options.indexOf(correct), note: t.note_pt || (t.term + ' = ' + t.pt)
+        options: options, answer: options.indexOf(correct), itemId: t.id, note: t.note_pt || (t.term + ' = ' + t.pt)
       };
     });
+    return { questions: questions, weakCount: picked.weakCount };
   }
 
   /* ----- Abreviações (MEDABBREV): glossário, flashcards SRS e quiz ----- */
@@ -137,8 +138,8 @@
   }
 
   function abbrQuiz() {
-    var pool = UI.shuffle(abbrData()).slice(0, 12);
-    return pool.map(function (a) {
+    var picked = Common.pickAdaptive(abbrData(), 'usmle:abbrev', 12);
+    var questions = picked.pool.map(function (a) {
       var correct = a.meaning_en;
       var distractors = UI.shuffle(abbrData().filter(function (x) { return x.id !== a.id && x.meaning_en !== a.meaning_en; }))
         .slice(0, 3).map(function (x) { return x.meaning_en; });
@@ -148,10 +149,11 @@
           el('p', { class: 'quiz-prompt' }, [ 'O que significa ', el('strong', {}, a.abbr), ' (' + a.context + ')?' ]),
           el('div', { class: 'stem small' }, el('em', {}, a.example_en))
         ]),
-        options: options, answer: options.indexOf(correct),
+        options: options, answer: options.indexOf(correct), itemId: a.id,
         note: a.abbr + ' = ' + a.full + ' — ' + a.pt
       };
     });
+    return { questions: questions, weakCount: picked.weakCount };
   }
 
   function menu(mount) {
@@ -192,7 +194,11 @@
       });
     } else if (params[0] === 'browse') browse(mount);
     else if (params[0] === 'notes') notesView(mount);
-    else if (params[0] === 'quiz') Common.quiz(mount, { title: 'Reconhecimento em enunciados', subtitle: 'USMLE / clínico', moduleKey: 'usmle', backTo: 'usmle', questions: buildQuiz() });
+    else if (params[0] === 'quiz') {
+      var bq = buildQuiz();
+      Common.quiz(mount, { title: 'Reconhecimento em enunciados', subtitle: 'USMLE / clínico', moduleKey: 'usmle',
+        adaptKey: 'usmle:terms', weakCount: bq.weakCount, backTo: 'usmle', questions: bq.questions });
+    }
     else if (params[0] === 'abbrev') abbrBrowse(mount);
     else if (params[0] === 'abbrev-review') {
       Common.review(mount, {
@@ -202,7 +208,11 @@
         buildBack: function (id) { return abbrBack(abbrData().find(function (a) { return a.id === id; })); }
       });
     }
-    else if (params[0] === 'abbrev-quiz') Common.quiz(mount, { title: 'Quiz de abreviações', subtitle: 'Prescrição, história e achados', moduleKey: 'usmle', backTo: 'usmle', questions: abbrQuiz() });
+    else if (params[0] === 'abbrev-quiz') {
+      var aq = abbrQuiz();
+      Common.quiz(mount, { title: 'Quiz de abreviações', subtitle: 'Prescrição, história e achados', moduleKey: 'usmle',
+        adaptKey: 'usmle:abbrev', weakCount: aq.weakCount, backTo: 'usmle', questions: aq.questions });
+    }
     else menu(mount);
   };
 })();

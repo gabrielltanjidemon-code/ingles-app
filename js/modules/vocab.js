@@ -35,10 +35,10 @@
     ]);
   }
 
-  /* ----- Quiz builders ----- */
+  /* ----- Quiz builders (seleção adaptativa por modo — 18.6) ----- */
   function buildQuiz(mode) {
-    var all = UI.shuffle(data()).slice(0, 12);
-    return all.map(function (t) {
+    var picked = Common.pickAdaptive(data(), 'vocab:' + mode, 12);
+    var questions = picked.pool.map(function (t) {
       var pool, correct, prompt;
       if (mode === 'tech-lay') {
         prompt = el('div', {}, [ el('p', { class: 'quiz-prompt' }, [ 'Qual a forma leiga de ', el('strong', {}, t.technical), '?', ' ', UI.audioBtn(t.technical) ]) ]);
@@ -55,8 +55,9 @@
       }
       var distractors = UI.shuffle(data().filter(function (x) { return x.id !== t.id; })).slice(0, 3).map(function (x) { return x[pool]; });
       var options = UI.shuffle([correct].concat(distractors));
-      return { prompt: prompt, options: options, answer: options.indexOf(correct), note: t.register_note_pt || (t.technical + ' = ' + t.pt) };
+      return { prompt: prompt, options: options, answer: options.indexOf(correct), itemId: t.id, note: t.register_note_pt || (t.technical + ' = ' + t.pt) };
     });
+    return { questions: questions, weakCount: picked.weakCount };
   }
 
   function browse(mount) {
@@ -126,7 +127,9 @@
     } else if (action === 'quiz') {
       var mode = params[1] || 'tech-lay';
       var titles = { 'tech-lay': 'Técnico → Leigo', 'lay-tech': 'Leigo → Técnico', 'en-pt': 'Inglês → Português', 'audio-term': 'Áudio → Termo' };
-      Common.quiz(mount, { title: titles[mode] || 'Quiz', subtitle: 'Vocabulário médico', moduleKey: 'vocab', backTo: 'vocab', questions: buildQuiz(mode) });
+      var built = buildQuiz(mode);
+      Common.quiz(mount, { title: titles[mode] || 'Quiz', subtitle: 'Vocabulário médico', moduleKey: 'vocab',
+        adaptKey: 'vocab:' + mode, weakCount: built.weakCount, backTo: 'vocab', questions: built.questions });
     } else {
       menu(mount);
     }

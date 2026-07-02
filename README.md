@@ -23,17 +23,18 @@ carregamento, funciona **offline** (instalável como app).
 
 | # | Módulo | O que faz |
 |---|--------|-----------|
-| 18 | **Vocabulário médico** | Flashcards técnico ↔ leigo ↔ PT (IPA + áudio), SRS e 4 quizzes |
+| 18 | **Vocabulário médico** | Flashcards técnico ↔ leigo ↔ PT (IPA + áudio), SRS e 4 quizzes adaptativos |
 | 19 | **Comunicação clínica** | Frases por função (SOCRATES/ICE/SPIKES/teach-back); ouvir (TTS) e praticar (STT) |
 | 20 | **OET Listening** | Consultas → note completion (correção palavra a palavra) + MCQ; áudio uma vez |
 | 21 | **OET Reading** | Part A cronometrada (15 min, skim/scan) + MCQ de inferência |
 | 22 | **OET Writing** | Case notes → carta (referral/discharge/transfer); contador 180–200, checklist, carta-modelo, correção por IA opcional |
 | 23 | **OET Speaking** | Role-plays: modo offline (diálogo ramificado) e modo voz (STT+TTS + IA) com feedback |
 | 24 | **USMLE / clínico** | Termos de alto rendimento em enunciados, patient notes (SOAP), abreviações (glossário + SRS + quiz) |
-| 25 | **Simulado OET** | Mock dos 4 sub-testes → 0–500 por skill + grade A–E; verifica metas ECFMG (350/350/350/300) |
+| 25 | **Simulado OET** | Mock cronometrado dos 4 sub-testes → 0–500 por skill + grade A–E; verifica metas ECFMG (350/350/350/300) |
 
-Mais: **Estatísticas** (domínio de vocabulário, acerto por módulo, placar OET vs ECFMG, ofensiva,
-XP, conquistas) e **Configurações**.
+Mais: **Estatísticas** (domínio de vocabulário, acerto por módulo, placar OET vs ECFMG, evolução
+de cada sub-teste ao longo dos simulados, ofensiva, XP, conquistas) e **Configurações**.
+Os quizzes são **adaptativos**: até 1/3 das questões reforça automaticamente os itens em que você mais erra.
 
 ## Estrutura
 

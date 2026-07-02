@@ -11,11 +11,35 @@
 
   function pick(arr, n) { return UI.shuffle(arr).slice(0, n); }
 
-  /* Runner de MCQ inline para o mock (áudio opcional). onDone(pct). */
+  /* Cronômetro de seção (mock cronometrado — 18.5.25). Auto-encerra a seção ao zerar. */
+  var timerId = null;
+  function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
+  function fmtTime(s) { var m = Math.floor(s / 60); var ss = s % 60; return m + ':' + (ss < 10 ? '0' : '') + ss; }
+  function startTimer(seconds, onExpire) {
+    stopTimer();
+    var left = seconds;
+    var node = el('span', { class: 'timer' }, '⏱️ ' + fmtTime(left));
+    timerId = setInterval(function () {
+      if (!node.isConnected) { stopTimer(); return; } // usuário saiu do simulado
+      left--;
+      node.textContent = '⏱️ ' + fmtTime(left);
+      if (left <= 0) { stopTimer(); onExpire(); }
+    }, 1000);
+    return node;
+  }
+
+  /* Runner de MCQ inline para o mock (áudio opcional; cronômetro opcional). onDone(pct). */
   function runMCQ(container, cfg, onDone) {
-    var qs = cfg.questions, idx = 0, score = 0;
+    var qs = cfg.questions, idx = 0, score = 0, ended = false;
+    function finish() {
+      if (ended) return;
+      ended = true;
+      stopTimer();
+      onDone(Math.round(100 * score / qs.length));
+    }
+    var timerEl = cfg.timerSeconds ? startTimer(cfg.timerSeconds, finish) : null;
     function show() {
-      if (idx >= qs.length) { onDone(Math.round(100 * score / qs.length)); return; }
+      if (idx >= qs.length) return finish();
       var q = qs[idx], answered = false;
       var optsEl = el('div', { class: 'quiz-options' });
       q.options.forEach(function (o, i) {
@@ -32,7 +56,7 @@
       UI.mount(container, [
         UI.sectionHeader(cfg.title, cfg.subtitle),
         UI.progressBar((idx / qs.length) * 100),
-        el('div', { class: 'counter' }, (idx + 1) + ' / ' + qs.length),
+        el('div', { class: 'row between' }, [ el('div', { class: 'counter' }, (idx + 1) + ' / ' + qs.length), timerEl ]),
         el('div', { class: 'card' }, [ q.audio ? audioBtnRow(q.audio) : null, el('p', { class: 'quiz-prompt' }, q.prompt), optsEl ]),
         nextBtn
       ]);
@@ -52,16 +76,18 @@
     function listening() {
       var pool = (window.OET_LISTENING || []).filter(function (x) { return x.type === 'mcq'; });
       var qs = pick(pool, 4).map(function (it) { return { prompt: it.question, options: it.options, answer: it.answer, audio: it.audio_text }; });
-      runMCQ(container, { title: '1/4 · Listening', subtitle: 'Ouça (uma vez) e responda', questions: qs }, function (p) { state.listening = pct500(p); reading(); });
+      runMCQ(container, { title: '1/4 · Listening', subtitle: 'Ouça (uma vez) e responda — o ritmo é ditado pelo áudio', questions: qs }, function (p) { state.listening = pct500(p); reading(); });
     }
 
     function reading() {
       var pool = (window.OET_READING || []).filter(function (x) { return x.part !== 'A'; });
       var qs = pick(pool, 4).map(function (it) { return { prompt: it.text_en + '\n\n' + it.question_en, options: it.options, answer: it.answer }; });
-      runMCQ(container, { title: '2/4 · Reading', subtitle: 'Leia e responda (inferência)', questions: qs }, function (p) { state.reading = pct500(p); writing(); });
+      runMCQ(container, { title: '2/4 · Reading', subtitle: 'Leia e responda (inferência) · ⏱️ 8 min (tempo de treino, proporcional ao OET)', timerSeconds: 8 * 60, questions: qs },
+        function (p) { state.reading = pct500(p); writing(); });
     }
 
     function writing() {
+      stopTimer();
       var ex = pick(window.OET_WRITING || [], 1)[0];
       var editor = el('textarea', { class: 'letter-editor', rows: 12, placeholder: 'Escreva a carta (corpo 180–200 palavras)…' });
       var counter = el('span', { class: 'wc' });
@@ -71,25 +97,33 @@
         var cb = el('input', { type: 'checkbox' });
         return { cb: cb, node: el('label', { class: 'check-item' }, [ cb, el('span', {}, c) ]) };
       });
+      var wDone = false;
+      function concludeWriting() {
+        if (wDone) return;
+        wDone = true;
+        stopTimer();
+        var n = (editor.value.trim().match(/\S+/g) || []).length;
+        var wordScore = (n >= 180 && n <= 200) ? 1 : (n >= 150 && n <= 230 ? 0.7 : (n >= 80 ? 0.45 : (n ? 0.25 : 0)));
+        var ticked = ticks.filter(function (t) { return t.cb.checked; }).length;
+        var checkRatio = ticks.length ? ticked / ticks.length : 0;
+        var p = Math.round(100 * (0.5 * wordScore + 0.5 * checkRatio));
+        state.writing = pct500(p);
+        if (ex.letter_type === 'referral') Badges.unlock('first_referral');
+        speaking();
+      }
+      var timerEl = startTimer(45 * 60, concludeWriting);
       UI.mount(container, [
         UI.sectionHeader('3/4 · Writing', 'Para: ' + ex.recipient),
+        el('div', { class: 'row between' }, [ el('span', { class: 'muted small' }, '45 min, como na prova (auto-envio ao zerar)'), timerEl ]),
         el('div', { class: 'card' }, [ el('h4', {}, 'Case notes'), el('p', { class: 'case-notes' }, ex.case_notes), el('div', { class: 'kp' }, [ el('strong', {}, 'Incluir: '), (ex.key_points || []).join('; ') ]) ]),
         el('div', { class: 'card' }, [ el('div', { class: 'editor-head' }, [ el('h4', {}, 'Sua carta'), counter ]), editor ]),
         el('div', { class: 'card' }, [ el('h4', {}, 'Autoavaliação (checklist)'), el('div', { class: 'checklist' }, ticks.map(function (t) { return t.node; })) ]),
-        el('button', { class: 'btn primary', onClick: function () {
-          var n = (editor.value.trim().match(/\S+/g) || []).length;
-          var wordScore = (n >= 180 && n <= 200) ? 1 : (n >= 150 && n <= 230 ? 0.7 : (n >= 80 ? 0.45 : (n ? 0.25 : 0)));
-          var ticked = ticks.filter(function (t) { return t.cb.checked; }).length;
-          var checkRatio = ticks.length ? ticked / ticks.length : 0;
-          var p = Math.round(100 * (0.5 * wordScore + 0.5 * checkRatio));
-          state.writing = pct500(p);
-          if (ex.letter_type === 'referral') Badges.unlock('first_referral');
-          speaking();
-        } }, 'Concluir Writing')
+        el('button', { class: 'btn primary', onClick: concludeWriting }, 'Concluir Writing')
       ]);
     }
 
     function speaking() {
+      stopTimer();
       var pool = (window.OET_SPEAKING || []).filter(function (x) { return x.dialogue && x.dialogue.length; });
       var item = pick(pool, 1)[0];
       var turns = item.dialogue, idx = 0, qualitySum = 0;
@@ -127,6 +161,7 @@
     }
 
     function results() {
+      stopTimer();
       Progress.saveMock({ listening: state.listening, reading: state.reading, writing: state.writing, speaking: state.speaking });
       Badges.check();
       var met = state.listening >= ECFMG.listening && state.reading >= ECFMG.reading && state.speaking >= ECFMG.speaking && state.writing >= ECFMG.writing;
@@ -166,9 +201,10 @@
     var best = Progress.bestMock();
     UI.mount(mount, [
       UI.backLink('home', 'Início'),
-      UI.sectionHeader('Simulado OET', 'Mock dos 4 sub-testes → 0–500 por skill + grade A–E'),
+      UI.sectionHeader('Simulado OET', 'Mock cronometrado dos 4 sub-testes → 0–500 por skill + grade A–E'),
       el('div', { class: 'card center' }, [
         el('p', {}, 'Metas ECFMG: Listening 350 · Reading 350 · Speaking 350 · Writing 300 (numa única sessão).'),
+        el('p', { class: 'muted small' }, '⏱️ Listening no ritmo do áudio (toca uma vez) · Reading 8 min (proporcional) · Writing 45 min (tempo real da prova) · Speaking em role-play.'),
         el('button', { class: 'btn primary lg', onClick: function () { run(mount); } }, '▶️ Iniciar simulado completo')
       ]),
       best ? el('div', { class: 'card' }, [ el('h4', {}, 'Melhor resultado' ), scoreTable(best) ]) : null,
