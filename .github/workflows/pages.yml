@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+# Publica o app estático (PWA) no GitHub Pages.
+# IMPORTANTE: nada é publicado até você habilitar o Pages em
+# Settings → Pages → Source: "GitHub Actions". Sem isso, este workflow
+# apenas fica pronto (uma execução pode falhar no passo de deploy até habilitar).
+
+on:
+  push:
+    branches: ["claude/new-session-ojg0m1"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site (raiz do repositório = app estático)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
