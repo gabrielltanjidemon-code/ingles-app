@@ -12,7 +12,8 @@
     var vocabDue = dueFor('vocab', (window.MEDVOCAB || []).map(function (t) { return t.id; }));
     var commDue = dueFor('comm', (window.CLINICALCOMM || []).map(function (t) { return t.id; }));
     var usmleDue = dueFor('usmle', (window.USMLE_CLINICAL || []).filter(function (x) { return x.kind === 'high-yield-term'; }).map(function (t) { return t.id; }));
-    var totalDue = vocabDue + commDue + usmleDue;
+    var abbrDue = dueFor('abbrev', (window.MEDABBREV || []).map(function (a) { return a.id; }));
+    var totalDue = vocabDue + commDue + usmleDue + abbrDue;
 
     var modules = [
       { n:18, icon:'🧠', title:'Vocabulário médico', sub:'Técnico ↔ leigo ↔ PT · IPA · SRS', route:'vocab' },
@@ -42,7 +43,8 @@
         el('div', { class: 'row gap wrap' }, [
           vocabDue ? el('a', { class: 'btn primary small', href: '#/vocab/review' }, 'Vocabulário (' + vocabDue + ')') : null,
           commDue ? el('a', { class: 'btn small', href: '#/comm/review' }, 'Comunicação (' + commDue + ')') : null,
-          usmleDue ? el('a', { class: 'btn small', href: '#/usmle/review' }, 'USMLE (' + usmleDue + ')') : null
+          usmleDue ? el('a', { class: 'btn small', href: '#/usmle/review' }, 'USMLE (' + usmleDue + ')') : null,
+          abbrDue ? el('a', { class: 'btn small', href: '#/usmle/abbrev-review' }, 'Abreviações (' + abbrDue + ')') : null
         ])
       ]) : el('div', { class: 'card muted' }, '✅ Sem revisões pendentes agora. Explore um módulo abaixo.'),
 

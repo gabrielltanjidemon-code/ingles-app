@@ -1,6 +1,6 @@
 /* sw.js — Service worker: cache-first do app shell para funcionamento offline.
    Requisições a origens externas (ex.: API da Anthropic) NÃO são interceptadas. */
-var CACHE = 'ingmed-v1';
+var CACHE = 'ingmed-v3';
 var ASSETS = [
   './',
   'index.html',

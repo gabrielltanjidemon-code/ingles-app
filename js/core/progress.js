@@ -67,6 +67,29 @@
 
   function getStreak() { return Store.get('streak', 0); }
 
+  /* ---- Adaptativo (18.6): acerto por item de quiz ---- */
+  function recordItemResult(key, id, correct) {
+    Store.update('itemstats', function (m) {
+      m = m || {};
+      m[key] = m[key] || {};
+      var s = m[key][id] || { a: 0, c: 0 };
+      s.a += 1;
+      if (correct) s.c += 1;
+      m[key][id] = s;
+      return m;
+    }, {});
+  }
+  /* IDs com menor taxa de acerto (tentados ≥2 vezes, acerto < 75%), do pior ao melhor. */
+  function weakItems(key, ids) {
+    var m = Store.get('itemstats', {})[key] || {};
+    return ids.filter(function (id) {
+      var s = m[id];
+      return s && s.a >= 2 && (s.c / s.a) < 0.75;
+    }).sort(function (x, y) {
+      return (m[x].c / m[x].a) - (m[y].c / m[y].a);
+    });
+  }
+
   /* ---- Métricas por módulo (acertos/tentativas) ---- */
   function recordResult(moduleKey, correct) {
     Store.update('modstats', function (m) {
@@ -124,6 +147,7 @@
     logActivity: logActivity, addXP: addXP, totalXP: totalXP,
     recomputeStreak: recomputeStreak, getStreak: getStreak,
     recordResult: recordResult, moduleStats: moduleStats,
+    recordItemResult: recordItemResult, weakItems: weakItems,
     saveMock: saveMock, mockHistory: mockHistory, bestMock: bestMock,
     markDone: markDone, isDone: isDone, doneCount: doneCount,
     daily: function () { return Store.get('daily', {}); }

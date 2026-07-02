@@ -8,11 +8,12 @@
   var ECFMG = { listening: 350, reading: 350, speaking: 350, writing: 300 };
 
   function grade(score) {
-    // Conversão aproximada 0-500 -> A-E do OET.
+    // Faixas oficiais do OET: A 450–500, B 350–440, C+ 300–340, C 200–290, D 100–190, E 0–90.
     if (score >= 450) return 'A';
     if (score >= 350) return 'B';
-    if (score >= 300) return 'C';
-    if (score >= 200) return 'D';
+    if (score >= 300) return 'C+';
+    if (score >= 200) return 'C';
+    if (score >= 100) return 'D';
     return 'E';
   }
 

@@ -35,6 +35,30 @@
     ]);
   }
 
+  /* Evolução de cada sub-teste no tempo (18.6), a partir do histórico de simulados. */
+  function evoCard(hist) {
+    var ECFMG = Badges.ECFMG;
+    var last = hist.slice(-8);
+    var skills = [ ['Listening', 'listening'], ['Reading', 'reading'], ['Speaking', 'speaking'], ['Writing', 'writing'] ];
+    return el('div', { class: 'card' }, [
+      el('h3', {}, 'Evolução por sub-teste'),
+      el('p', { class: 'muted small' }, 'Últimos ' + last.length + ' simulados (0–500). Verde = atingiu a meta ECFMG.'),
+      el('div', {}, skills.map(function (s) {
+        return el('div', { class: 'evo-row' }, [
+          el('div', { class: 'evo-lbl' }, s[0]),
+          el('div', { class: 'bar-chart mini' }, last.map(function (m) {
+            var v = m[s[1]] || 0;
+            var met = v >= ECFMG[s[1]];
+            return el('div', { class: 'bar-col' }, [
+              el('div', { class: 'bar' + (met ? ' met' : ''), style: { height: Math.round(6 + 58 * v / 500) + 'px' },
+                title: new Date(m.date).toLocaleDateString('pt-BR') + ' — ' + v })
+            ]);
+          }))
+        ]);
+      }))
+    ]);
+  }
+
   function render(mount) {
     var streak = Progress.getStreak();
     var best = Store.get('bestStreak', 0);
@@ -44,7 +68,9 @@
     var vocab = deckMastery('vocab');
     var usmle = deckMastery('usmle');
     var comm = deckMastery('comm');
+    var abbrev = deckMastery('abbrev');
     var bestMock = Progress.bestMock();
+    var hist = Progress.mockHistory();
     var ECFMG = Badges.ECFMG;
 
     UI.mount(mount, [
@@ -71,6 +97,7 @@
         masteryRow('Vocabulário médico', vocab, (window.MEDVOCAB || []).length),
         masteryRow('Termos USMLE', usmle, (window.USMLE_CLINICAL || []).filter(function (x) { return x.kind === 'high-yield-term'; }).length),
         masteryRow('Comunicação clínica', comm, (window.CLINICALCOMM || []).length),
+        masteryRow('Abreviações', abbrev, (window.MEDABBREV || []).length),
         el('div', { class: 'muted small' }, 'Ativo = revisado ≥ 2 vezes (memória consolidada). Passivo = já visto.')
       ]),
 
@@ -93,6 +120,8 @@
           ecfmgBar('Writing', bestMock.writing, ECFMG.writing)
         ]) : el('p', { class: 'muted' }, ['Faça um ', el('a', { href: '#/mock' }, 'Simulado OET'), ' para ver seu placar 0–500 por skill.'])
       ]),
+
+      hist.length >= 2 ? evoCard(hist) : null,
 
       el('div', { class: 'card' }, [
         el('h3', {}, 'Conquistas'),

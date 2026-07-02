@@ -90,8 +90,22 @@
     }
   }
 
+  /* Seleção adaptativa (18.6): prioriza itens com menor taxa de acerto.
+     Devolve { pool, weakCount } — até 1/3 do quiz vem dos itens mais errados. */
+  function pickAdaptive(items, adaptKey, n) {
+    var byId = {};
+    items.forEach(function (it) { byId[it.id] = it; });
+    var weak = Progress.weakItems(adaptKey, items.map(function (it) { return it.id; }))
+      .slice(0, Math.floor(n / 3))
+      .map(function (id) { return byId[id]; })
+      .filter(Boolean);
+    var rest = UI.shuffle(items.filter(function (it) { return weak.indexOf(it) < 0; })).slice(0, Math.max(0, n - weak.length));
+    return { pool: UI.shuffle(weak.concat(rest)), weakCount: weak.length };
+  }
+
   /* Quiz de múltipla escolha.
-     opts: { title, subtitle, moduleKey, questions:[{prompt(node|str), options:[str|node], answer, note}], backTo, onDone } */
+     opts: { title, subtitle, moduleKey, adaptKey, weakCount,
+             questions:[{prompt(node|str), options:[str|node], answer, note, itemId}], backTo, onDone } */
   function quiz(mount, opts) {
     var qs = opts.questions;
     var idx = 0, score = 0;
@@ -131,6 +145,7 @@
           var isRight = i === q.answer;
           if (isRight) score++;
           if (opts.moduleKey) Progress.recordResult(opts.moduleKey, isRight);
+          if (opts.adaptKey && q.itemId) Progress.recordItemResult(opts.adaptKey, q.itemId, isRight);
           Array.prototype.forEach.call(optsEl.children, function (c, j) {
             c.classList.add('disabled');
             if (j === q.answer) c.classList.add('correct');
@@ -151,6 +166,7 @@
       UI.mount(container, [
         opts.backTo ? UI.backLink(opts.backTo, 'Voltar') : null,
         UI.sectionHeader(opts.title, opts.subtitle),
+        opts.weakCount ? el('div', { class: 'adapt-note' }, '🎯 Prática adaptativa: reforçando ' + opts.weakCount + ' item(ns) em que você mais errou.') : null,
         UI.progressBar((idx / qs.length) * 100),
         el('div', { class: 'counter' }, (idx + 1) + ' / ' + qs.length),
         el('div', { class: 'card quiz-body' }, [ promptNode, optsEl ]),
@@ -161,5 +177,5 @@
     showQ();
   }
 
-  window.Common = { review: review, quiz: quiz };
+  window.Common = { review: review, quiz: quiz, pickAdaptive: pickAdaptive };
 })();
